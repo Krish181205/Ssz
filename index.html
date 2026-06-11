@@ -791,7 +791,7 @@ const WEEKS = [
       {
         id: "w13t4", track: "manufacturing", emoji: "🏭",
         title: "Manufacturing Part 1 — Production Workflow + QA vs QC",
-        why: "Your endgame is manufacturing (including peptides later). To build compliance tools AND eventually run a plant, you must understand how a pharma factory actually works day-to-day. Most software people never learn this — it's your moat. Starting now (Month 4), you'll build a real mental model across Phase 2–5: the departments, the flow of a batch, and the QA vs QC distinction that confuses almost everyone outside the industry. This week: the production workflow and the QA/QC split.",
+        why: "Your endgame is manufacturing (including peptides later). To build compliance tools AND eventually run a plant, you must understand how a pharma factory actually works day-to-day. Most software people never learn this — it's your moat. Starting now (Month 4), you'll build a real mental model across Phase 2–5: the departments, the flow of a batch, and the QA vs QC distinction that confuses almost everyone outside the industry. This week is Part 1 of your dedicated Manufacturing Operations module: the production workflow and the QA/QC split.",
         steps: [
           { n: 1, action: "Learn a tablet batch end-to-end. Write the flow: Dispensing (weigh raw materials in a controlled area) → Granulation → Drying → Blending → Compression → Coating → Inspection → Packing → QC release → Warehouse → Dispatch. Watch a 'pharmaceutical tablet manufacturing process' video to see it." },
           { n: 2, action: "Map the departments and how they interact: Production, QA (Quality Assurance), QC (Quality Control), Warehouse/Stores, Engineering/Maintenance, Regulatory Affairs. Draw a one-page flow diagram." },
@@ -872,7 +872,7 @@ const WEEKS = [
   {
     week: 15, phase: 2, month: 4,
     label: "Week 15 — LangChain Begins + OpenRouter",
-    subtitle: "LangChain for LLM App Dev · Interviews 4–5 · OpenRouter (one API for every model)",
+    subtitle: "LangChain for LLM App Dev · OpenRouter · Manufacturing 2: warehouse, stores & materials",
     emoji: "⛓️",
     tasks: [
       {
@@ -910,12 +910,30 @@ const WEEKS = [
         timeEst: "2 hours",
         tip: "Keep API keys in a .env file and add .env to .gitignore — NEVER paste keys into code you push to GitHub. Leaked keys get abused within minutes by bots scanning public repos."
       },
+      {
+        id: "w15t3", track: "manufacturing", emoji: "📦",
+        title: "Manufacturing Part 2 — Warehouse, Stores & Materials Management",
+        why: "Part 2 of your dedicated Manufacturing Operations module. Warehouse/Stores is the backbone of material control in a GMP plant — the link between production and quality, and the single most common source of audit findings. Since your end goal is running a plant (not only software), you need the full materials lifecycle in your head: how a raw material enters, gets tested, gets released or rejected, and reaches the dispensing booth. This is also a rich seam of product ideas (material tracking, FEFO alerts).",
+        steps: [
+          { n: 1, action: "Learn the material lifecycle in a GMP warehouse and write it in your Plant Knowledge notes: Receipt (GRN — Goods Receipt Note) → Quarantine (under-test) → QC sampling → Approved or Rejected → Storage → Dispensing to production → Finished goods → Dispatch." },
+          { n: 2, action: "Status-label system: learn the 3 statuses every material must carry — QUARANTINE, APPROVED, REJECTED — and why both physical AND system segregation are required. This is a classic auditor checkpoint." },
+          { n: 3, action: "FEFO vs FIFO: learn First-Expiry-First-Out (FEFO) for pharma materials and why it beats plain FIFO. Note how software enforces it (your Week 7 inventory DB already touches this)." },
+          { n: 4, action: "Storage & cold chain: learn controlled storage (temperature, humidity), cold chain (2–8°C), warehouse temperature mapping, and data-loggers. This sets up next week's HVAC/water systems." },
+          { n: 5, action: "Key documents: GRN, material requisition / dispensing record, stock (bin) cards, and the Stores SOP. Note where WMS/ERP systems replace paper." },
+          { n: 6, action: "Dispensing booth: understand the controlled area where raw materials are weighed for a batch, and why it is a contamination-control hotspot (links back to clean rooms next week)." },
+          { n: 7, action: "AI tutor + product angle: ask your AI assistant to explain the GRN → quarantine → release flow with an example, then add to your 'where software/AI could help' list: barcode/QR material tracking, FEFO expiry alerts, temperature-excursion logging, automated GRN entry." },
+          { n: 8, action: "Update your notes: you've now mapped Production (Wk13) + Warehouse/Materials (this week). Next week = facility systems (HVAC, water, validation) — that completes the plant." },
+        ],
+        resources: ["WHO TRS 986 Annex 2 (Materials section)", "USP GMP Module 4 — Materials Management (your notes)", "YouTube: 'pharma warehouse GMP material flow'"],
+        timeEst: "2.5 hours",
+        tip: "Warehouse status control (quarantine vs approved vs rejected) is one of the most common audit findings AND one of the easiest to fix with simple software. A strong candidate for your first real manufacturing-adjacent product."
+      },
     ]
   },
   {
     week: 16, phase: 2, month: 5,
     label: "Week 16 — LangChain + RAG Preview",
-    subtitle: "LangChain Lessons 4–6 · Excel advanced · Manufacturing 2: HVAC, water, clean rooms, validation",
+    subtitle: "LangChain Lessons 4–6 · Excel advanced · Manufacturing 3: HVAC, water, clean rooms, validation",
     emoji: "📊",
     tasks: [
       {
@@ -948,8 +966,8 @@ const WEEKS = [
       },
       {
         id: "w16t3", track: "manufacturing", emoji: "❄️",
-        title: "Manufacturing Part 2 — HVAC, Water, Clean Rooms & Validation",
-        why: "This is the 'invisible' systems layer that actually makes a pharma plant compliant — and the knowledge you'll need for your future peptide/manufacturing plans. HVAC, water systems, and clean rooms are where most of a plant's capital cost AND most audit findings live. Validation is the documented proof that all of it works. Software people never learn this; for you it's both a moat for your compliance tools and essential founder knowledge for building your own facility.",
+        title: "Manufacturing Part 3 — HVAC, Water, Clean Rooms & Validation",
+        why: "Part 3 (final) of your Manufacturing Operations module — the 'invisible' systems layer that actually makes a pharma plant compliant, and the knowledge you'll need for your future peptide/manufacturing plans. HVAC, water systems, and clean rooms are where most of a plant's capital cost AND most audit findings live. Validation is the documented proof that all of it works. Software people never learn this; for you it's both a moat for your compliance tools and essential founder knowledge for building your own facility.",
         steps: [
           { n: 1, action: "Clean rooms & air classification: learn the ISO 14644 / WHO-GMP grades A, B, C, D and what each is for (Grade A = sterile/critical filling, D = least critical). Note: particle counts, air changes per hour, pressure differentials (cascade), and gowning." },
           { n: 2, action: "HVAC (Heating, Ventilation, Air Conditioning): the system that controls air cleanliness, temperature, humidity, and pressure. Key terms: HEPA filters, Air Handling Units (AHU), pressure cascade (cleaner rooms at higher pressure so dirty air can't flow in). HVAC qualification is a top auditor focus." },
@@ -969,7 +987,7 @@ const WEEKS = [
   {
     week: 17, phase: 2, month: 5,
     label: "Week 17 — Building Systems with ChatGPT API",
-    subtitle: "Building Systems course · Interviews 9–12 · First LinkedIn project demo",
+    subtitle: "Building Systems course · Interviews 9–12 · Power BI QA/QC dashboard (1-week deep dive)",
     emoji: "🔗",
     tasks: [
       {
@@ -1003,6 +1021,24 @@ const WEEKS = [
         resources: ["automatetheboringstuff.com/2e/chapter12 (free)", "books.toscrape.com (legal practice site)", "beautiful-soup-4.readthedocs.io"],
         timeEst: "3.5 hours",
         tip: "When a website loads data with JavaScript (the HTML you scrape looks empty), the data usually comes from a hidden API. Open Chrome DevTools → Network tab → XHR and look for JSON responses — calling that API directly with requests is easier and more reliable than browser automation."
+      },
+      {
+        id: "w17t3", track: "learn", emoji: "📊",
+        title: "Power BI — Build a Pharma QA/QC Dashboard (1-Week Deep Dive)",
+        why: "Pharma companies LOVE dashboards — and quality heads live inside them. You learned Power BI basics in Week 12 and QA/QC + warehouse concepts in Weeks 13–16; this week you combine them into the deliverable managers actually crave: a QA/QC quality dashboard showing batch pass/fail, out-of-specification (OOS) trends, deviations, and right-first-time. This is a recognisable, sellable artefact for your freelancing AND the kind of output your future GMP product will generate. Budget about a week (≈4–5 hours).",
+        steps: [
+          { n: 1, action: "Build a realistic QC dataset (Excel/CSV), reusing your Week 10 batch data: columns batch_no, product, test_date, test_type, result (Pass/Fail/OOS), deviation_flag (Y/N), right_first_time (Y/N), department. Aim for ~80 rows." },
+          { n: 2, action: "Excel → Power BI: import the file into Power BI Desktop and clean it in Power Query (fix data types, remove blanks, split columns). This is the core 'Excel to Power BI' workflow pharma analysts use daily." },
+          { n: 3, action: "Build QA/QC KPI cards: total batches, % right-first-time (RFT), OOS rate %, open deviations. These are exactly the metrics a quality head reports to management." },
+          { n: 4, action: "Build trend visuals: a line chart of OOS rate by month (a basic control-chart view), a bar chart of deviations by product/department, and a Pass/Fail/OOS donut." },
+          { n: 5, action: "Add interactivity: slicers for product, month, and department so a QA manager can drill into any area. Add a red-flag table listing every OOS/failed batch." },
+          { n: 6, action: "Learn one DAX measure: create RFT% = DIVIDE(CALCULATE(COUNTROWS(Data), Data[right_first_time]=\"Y\"), COUNTROWS(Data)). DAX is Power BI's formula language — one real measure shows you can go beyond drag-and-drop." },
+          { n: 7, action: "Polish (clear title, consistent colours), screenshot, and — if you have a Microsoft account — publish to the Power BI service for a shareable link." },
+          { n: 8, action: "Portfolio + LinkedIn: add it to Upwork/Fiverr as a 'pharma QA/QC dashboard' service, and post: 'Built a QA/QC quality dashboard in Power BI — right-first-time %, OOS trends, and deviation tracking, filterable by product and month. The exact view pharma quality heads want. Excel → Power BI → decisions. 📊 #powerbi #pharmaQA #dataanalytics'" },
+        ],
+        resources: ["powerbi.microsoft.com (Power BI Desktop — free)", "learn.microsoft.com/power-bi (free official path)", "YouTube: 'Power BI DAX basics'", "Your Week 13–16 QA/QC notes"],
+        timeEst: "1 week (≈4–5 hours): basics → Excel→Power BI → QA/QC dashboard",
+        tip: "An OOS-trend + deviation dashboard is the single most impressive thing you can put in front of a pharma quality manager — it proves you understand BOTH their data and their compliance world. Lead your portfolio with it."
       },
     ]
   },
@@ -1131,7 +1167,7 @@ const WEEKS = [
   {
     week: 21, phase: 2, month: 6,
     label: "Week 21 — RAG UI + n8n Automation",
-    subtitle: "Streamlit UI for RAG assistant · n8n automation intro · Customer interview synthesis",
+    subtitle: "Streamlit UI for RAG assistant · AI Agent Stack capstone (Ollama+OpenRouter+LangGraph+Vector DB+MCP)",
     emoji: "🖥️",
     tasks: [
       {
@@ -1150,6 +1186,24 @@ const WEEKS = [
         resources: ["streamlit.io (free)", "huggingface.co/spaces (free hosting)"],
         timeEst: "4 hours",
         tip: "When you post the demo link on LinkedIn, tag your target audience in the post: 'Pharma QA managers — does this solve a real problem you face? Honest feedback appreciated.' This will get you your best customer discovery data yet."
+      },
+      {
+        id: "w21t2", track: "ai", emoji: "🧩",
+        title: "AI Agent Stack Capstone — Wire the 2026 Stack into Your GMP Assistant",
+        why: "You've learned the whole 2026 AI agent stack piece by piece — Ollama (private local models, Wk14), OpenRouter (any model via one key, Wk15), Vector DBs (memory, Wk18), LangGraph (agent orchestration, Wk19), and MCP (tools, Wk20). This week you SEE them as one stack and wire a minimal agentic version of your GMP assistant. This is the architecture your flagship product graduates into: not just Q&A, but an agent that retrieves, reasons, and acts — and the exact stack employers and investors mean when they say 'agentic AI'.",
+        steps: [
+          { n: 1, action: "Draw the stack on one page ('AI Agent Stack 2026'): Model layer (OpenRouter to swap any model / Ollama for private local) → Memory layer (Vector DB: Chroma local, Pinecone/Qdrant hosted) → Orchestration (LangGraph: the decision loop) → Tools (MCP servers exposing your functions). Label which Week you learned each — you already own every layer." },
+          { n: 2, action: "Define the agent's job: 'Answer a GMP/Schedule M compliance question by (a) retrieving relevant clauses from the vector DB, (b) optionally calling an MCP tool (e.g., lookup_export_requirement), (c) returning a cited answer.'" },
+          { n: 3, action: "Model flexibility: route your LLM call through OpenRouter so you can switch models with one line, with Ollama as a local/private fallback for confidential pharma data. One config, two options." },
+          { n: 4, action: "Memory: point the agent at the existing ChromaDB store from your gmp-rag-assistant (Wk18–20). Retrieval IS the agent's knowledge." },
+          { n: 5, action: "Orchestration with LangGraph: build a small 3-node graph — node 1 retrieve, node 2 decide (does it need a tool?), node 3 generate answer with citations. Keep it minimal." },
+          { n: 6, action: "Tools via MCP: expose the search_schedule_m / lookup_export_requirement tool you built in Wk20 and let the LangGraph agent call it." },
+          { n: 7, action: "Test end-to-end with 5 compliance questions; confirm it cites sources and says 'I don't know' when the answer isn't in the documents (grounding). Note which model (via OpenRouter) gives the best answers." },
+          { n: 8, action: "Push 'agentic-gmp-assistant' with an architecture-diagram README, and post: 'Wired the full 2026 AI agent stack — OpenRouter + Ollama (models), Chroma (memory), LangGraph (orchestration), MCP (tools) — into an agentic GMP compliance assistant. It retrieves, reasons, and cites. 🤖💊 #AIagents #langgraph #MCP #pharmatech'" },
+        ],
+        resources: ["python.langchain.com/docs/langgraph", "modelcontextprotocol.io", "openrouter.ai", "trychroma.com", "ollama.com"],
+        timeEst: "4 hours",
+        tip: "Don't aim for production — aim for ONE clean end-to-end pass through all five layers. Once you've seen the whole stack work together once, scaling each layer is just iteration."
       },
     ]
   },
