@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0B1220">
+  <meta name="color-scheme" content="dark">
   <title>💊 Pharma-Tech Founder Mentor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -440,7 +441,7 @@ const WEEKS = [
         steps: [
           { n: 1, action: "Take 2–3 screenshots of your Schedule M Checker running — showing the output with flagged non-compliant items" },
           { n: 2, action: "Open LinkedIn → Start a post → Click the image icon → Upload your screenshots" },
-          { n: 3, action: "Write: 'Month 2 project: Built a Schedule M Gap Checker in Python 🐍💊\\n\\nWhat it does: Reads a CSV of GMP compliance requirements and flags non-compliant items in red.\\n\\nWhy: India has 8,500+ pharma MSMEs facing the revised Schedule M deadline (Jan 2026 for extension-applicants). A simple tool to track compliance gaps could save QA teams hours of manual work.\\n\\nCode on GitHub: [link]\\n\\nIf you're a pharma QA manager — I'd love to hear what your real compliance tracking looks like. Drop a comment or DM me. 🙏\\n\\n#scheduleM #pharmatech #python #GMP #healthtechIndia'" },
+          { n: 3, action: "Write: 'Month 2 project: Built a Schedule M Gap Checker in Python 🐍💊\\n\\nWhat it does: Reads a CSV of GMP compliance requirements and flags non-compliant items in red.\\n\\nWhy: India has 8,500+ pharma MSMEs facing revised Schedule M compliance deadlines. A simple tool to track compliance gaps could save QA teams hours of manual work.\\n\\nCode on GitHub: [link]\\n\\nIf you're a pharma QA manager — I'd love to hear what your real compliance tracking looks like. Drop a comment or DM me. 🙏\\n\\n#scheduleM #pharmatech #python #GMP #healthtechIndia'" },
           { n: 4, action: "Post it. Reply to every comment within 12 hours." },
           { n: 5, action: "If any QA manager or pharma professional comments or DMs — respond warmly and ask if you can have a 20-minute call to learn about their workflow. This is your first customer discovery lead." },
         ],
@@ -1343,7 +1344,7 @@ const WEEKS = [
       {
         id: "w33t2", track: "funding", emoji: "💰",
         title: "Research SISFS — Startup India Seed Fund Scheme",
-        why: "SISFS offers up to ₹20 lakh as a grant for proof-of-concept, plus up to ₹50 lakh as convertible debt. This is non-dilutive funding — you don't give up equity. For a pre-seed pharma-tech founder, this is the ideal first funding. Application deadline: May 31, 2026 — you need to start now.",
+        why: "SISFS offers up to ₹20 lakh as a grant for proof-of-concept, plus up to ₹50 lakh as convertible debt. This is non-dilutive funding — you don't give up equity. For a pre-seed pharma-tech founder, this is the ideal first funding. Applications run in periodic windows via approved incubators — check the current window on seedfund.startupindia.gov.in and start preparing now.",
         steps: [
           { n: 1, action: "Go to startupindia.gov.in → Search 'Startup India Seed Fund Scheme'" },
           { n: 2, action: "Read the eligibility criteria carefully: must be DPIIT-recognised startup, not more than 2 years old, working on proof of concept" },
@@ -1353,7 +1354,7 @@ const WEEKS = [
         ],
         resources: ["startupindia.gov.in", "SISFS application portal"],
         timeEst: "3 hours",
-        tip: "SISFS application deadline is May 31, 2026. If you're reading this in Month 12, that's approximately now. Don't procrastinate — the application takes 2–3 weeks to prepare properly."
+        tip: "SISFS accepts applications in periodic windows through its approved incubators — check seedfund.startupindia.gov.in for the current one. Don't procrastinate — the application takes 2–3 weeks to prepare properly, so being ready BEFORE a window opens is the edge."
       },
     ]
   },
@@ -1385,7 +1386,7 @@ const WEEKS = [
       {
         id: "w34t2", track: "funding", emoji: "📋",
         title: "Collect SISFS Application Documents",
-        why: "The SISFS application requires specific documents — if you gather them last-minute, you'll submit a rushed application. Starting now gives you 4+ weeks to perfect each document. The application deadline is May 31, 2026. ₹20 lakh grant at stake.",
+        why: "The SISFS application requires specific documents — if you gather them last-minute, you'll submit a rushed application. Starting now gives you 4+ weeks to perfect each document, so you can apply the day a window opens. ₹20 lakh grant at stake.",
         steps: [
           { n: 1, action: "Go to startupindia.gov.in → SISFS section → Download the application checklist" },
           { n: 2, action: "Create a Google Drive folder: 'SISFS Application 2026'" },
@@ -3642,8 +3643,10 @@ function SkillCalculator() {
     return clampField(key, n);
   };
   const setFromSlider = (key, v) => setVals(prev => ({ ...prev, [key]: String(v) }));
-  const setFromBox = (key, raw) => {
+  const setFromBox = (key, raw, validity) => {
     const t = String(raw).trim();
+    // Mid-typing decimals like "2." report value "" with badInput — keep prior state instead of clearing the box.
+    if (t === "" && validity && validity.badInput) return;
     if (t === "") { setVals(prev => ({ ...prev, [key]: "" })); return; }
     const n = Number(t);
     const v = isFinite(n) ? clampField(key, n) : CALC_FIELDS[key].min;
@@ -3713,7 +3716,7 @@ function SkillCalculator() {
                   aria-label={f.label + " slider"}
                   style={{ flex: 1, accentColor: f.color, height: 24, cursor: "pointer", touchAction: "manipulation", minWidth: 0 }} />
                 <input type="number" inputMode="numeric" min={f.min} max={f.max} step={1} value={vals[key]}
-                  onChange={e => setFromBox(key, e.target.value)}
+                  onChange={e => setFromBox(key, e.target.value, e.target.validity)}
                   onBlur={() => onBlurField(key)}
                   aria-label={f.label}
                   style={{ width: 64, height: 44, borderRadius: 10, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.06)", color: "#E9EEF8", textAlign: "center", fontSize: 16, fontWeight: 600, outline: "none", flexShrink: 0 }} />
@@ -3834,6 +3837,7 @@ function App() {
       try {
         const data = JSON.parse(reader.result);
         const saved = (data && typeof data === "object" && data.completedTasks) ? data.completedTasks : data;
+        if (!saved || typeof saved !== "object" || Array.isArray(saved)) throw new Error("not a progress map");
         const validIds = new Set(WEEKS.flatMap(w => w.tasks.map(t => t.id)));
         const cleaned = {};
         Object.keys(saved || {}).forEach(id => { if (saved[id] && validIds.has(id)) cleaned[id] = true; });
@@ -3894,7 +3898,7 @@ Keep it practical, specific to pharma in India, and actionable. Write like a kno
         method: "POST",
         headers: { "Content-Type": "application/json", "anthropic-version": "2023-06-01" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-6",
           max_tokens: 1000,
           messages: [{ role: "user", content: prompt }]
         })
