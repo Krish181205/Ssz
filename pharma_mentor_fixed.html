@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0B1220">
   <title>💊 Pharma-Tech Founder Mentor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +14,9 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; background: #0B1220; }
-    body { -webkit-font-smoothing: antialiased; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body { -webkit-font-smoothing: antialiased; overscroll-behavior-y: contain; }
+    button { touch-action: manipulation; }
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 99px; }
@@ -3918,13 +3921,13 @@ Keep it practical, specific to pharma in India, and actionable. Write like a kno
     progressFill: { height: "100%", background: "linear-gradient(90deg,#34E0B8,#9B8CFF)", borderRadius: 99, transition: "width 0.5s ease" },
     chip: (c) => ({ display: "inline-flex", alignItems: "center", gap: 5, background: `${c}18`, border: `1px solid ${c}40`, color: c, borderRadius: 99, padding: "3px 10px", fontSize: 11.5, fontWeight: 600, fontFamily: "monospace" }),
     weekCard: (ph, done) => ({ background: done ? "rgba(52,224,184,0.06)" : "rgba(18,26,43,0.8)", border: `1px solid ${done ? "rgba(52,224,184,0.3)" : "rgba(255,255,255,0.07)"}`, borderRadius: 14, padding: "14px 16px", marginBottom: 10, cursor: "pointer", transition: "all 0.15s ease" }),
-    btn: (c = "#34E0B8") => ({ background: `${c}22`, border: `1px solid ${c}55`, color: c, borderRadius: 10, padding: "9px 16px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "monospace", transition: "all 0.15s ease" }),
+    btn: (c = "#34E0B8") => ({ background: `${c}22`, border: `1px solid ${c}55`, color: c, borderRadius: 10, padding: "9px 16px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "monospace", transition: "all 0.15s ease", minHeight: 40 }),
     taskCard: (track, done) => ({ background: done ? "rgba(52,224,184,0.07)" : "rgba(18,26,43,0.9)", border: `2px solid ${done ? "#34E0B8" : (TRACK_COLORS[track] || "#34E0B8")}30`, borderRadius: 14, padding: 16, marginBottom: 12, cursor: "pointer" }),
     stepRow: () => ({ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: 10, padding: "10px 14px", background: "rgba(255,255,255,0.03)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)" }),
     stepNum: { width: 26, height: 26, borderRadius: 99, background: "linear-gradient(135deg,#34E0B8,#9B8CFF)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#0B1220", flexShrink: 0 },
     back: { background: "transparent", border: "none", color: "#94A2BE", cursor: "pointer", fontSize: 13, display: "flex", alignItems: "center", gap: 6, padding: "6px 0", marginBottom: 12 },
     guideBox: { background: "rgba(155,140,255,0.07)", border: "1px solid rgba(155,140,255,0.3)", borderRadius: 14, padding: 18, marginTop: 14, lineHeight: 1.7, whiteSpace: "pre-wrap", fontSize: 14 },
-    phaseTab: (active, c) => ({ background: active ? `${c}22` : "transparent", border: `1px solid ${active ? c : "rgba(255,255,255,0.1)"}`, color: active ? c : "#94A2BE", borderRadius: 99, padding: "6px 14px", fontSize: 12, cursor: "pointer", fontFamily: "monospace", fontWeight: 600 }),
+    phaseTab: (active, c) => ({ background: active ? `${c}22` : "transparent", border: `1px solid ${active ? c : "rgba(255,255,255,0.1)"}`, color: active ? c : "#94A2BE", borderRadius: 99, padding: "8px 14px", fontSize: 12, cursor: "pointer", fontFamily: "monospace", fontWeight: 600, minHeight: 36 }),
     input: { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: "9px 14px", color: "#E9EEF8", fontSize: 13, width: "100%", outline: "none", fontFamily: "inherit" },
     tag: (c) => ({ display: "inline-block", background: `${c}18`, border: `1px solid ${c}40`, color: c, borderRadius: 6, padding: "2px 8px", fontSize: 11, fontWeight: 600, marginRight: 6, fontFamily: "monospace" }),
   };
