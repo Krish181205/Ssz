@@ -24,3 +24,8 @@ A single-file React app: a **24-month, week-by-week mentor roadmap** (96 weeks, 
 6. **Finance** — product costing, full export costing model, working capital + cash conversion cycle, inventory control (ABC/EOQ/FEFO), 13-week cash flow forecast
 
 Progress is saved locally per task. Each task includes: why it matters, numbered micro-steps, resources, time estimate, and a pro tip — plus an optional AI mentor for deeper guidance.
+
+## Built-in global credential ladder (job-insurance layer)
+
+Even if the startup fails, the roadmap independently earns globally verifiable credentials: CS50P (Harvard) · GitHub Student Pack + Foundations cert · HackerRank SQL badges · Kaggle micro-certs · Hugging Face AI Agents certificate · freeCodeCamp Responsive Web Design · CFI Accounting Fundamentals · Six Sigma White Belt (CSSC) · NPTEL/IIT pharma certificates · USP GMP + OpenWHO (WHO) records · ITC SME Trade Academy (UN/WTO) certificates · ISPE + RAPS memberships — plus global student competitions (Hult Prize, Microsoft Imagine Cup, Falling Walls Lab). Week 96 closes with a credential audit mapping the stack to roles in India and abroad: QA/validation, regulatory affairs, AI automation engineering, BI/product analytics, export-import, and tech sales.
+
