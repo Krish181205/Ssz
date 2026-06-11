@@ -3622,6 +3622,14 @@ function App() {
   const [searchQ, setSearchQ] = useState("");
   const guideRef = useRef(null);
   const askSeqRef = useRef(0); // guards against a slow response overwriting a newer task's guide
+  const [saveMsg, setSaveMsg] = useState("");
+  const restoreRef = useRef(null);
+  const msgTimerRef = useRef(null);
+  const flashMsg = (t) => {
+    setSaveMsg(t);
+    if (msgTimerRef.current) clearTimeout(msgTimerRef.current);
+    msgTimerRef.current = setTimeout(() => setSaveMsg(""), 4500);
+  };
 
   // Load persisted task completions from storage on mount
   useEffect(() => {
@@ -3650,6 +3658,51 @@ function App() {
       })();
       return next;
     });
+  };
+
+  // Save progress as a downloadable backup file on the device (works on Android + Windows browsers)
+  const saveBackup = async () => {
+    try {
+      try { await appStorage.set('pharma_mentor_done', JSON.stringify(completedTasks)); } catch {}
+      const json = JSON.stringify({ app: "pharma-mentor", version: 2, savedAt: new Date().toISOString(), completedTasks }, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "pharma-mentor-progress-" + new Date().toISOString().slice(0, 10) + ".json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      flashMsg("✓ Saved — backup file downloaded to your device");
+    } catch {
+      flashMsg("⚠️ Could not create a backup file in this browser");
+    }
+  };
+
+  // Restore progress from a previously downloaded backup file
+  const restoreBackup = (e) => {
+    const input = e.target;
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        const saved = (data && typeof data === "object" && data.completedTasks) ? data.completedTasks : data;
+        const validIds = new Set(WEEKS.flatMap(w => w.tasks.map(t => t.id)));
+        const cleaned = {};
+        Object.keys(saved || {}).forEach(id => { if (saved[id] && validIds.has(id)) cleaned[id] = true; });
+        setCompletedTasks(cleaned);
+        (async () => { try { await appStorage.set('pharma_mentor_done', JSON.stringify(cleaned)); } catch {} })();
+        flashMsg("✓ Restored " + Object.keys(cleaned).length + " completed tasks from backup");
+      } catch {
+        flashMsg("⚠️ That file is not a valid Pharma Mentor backup");
+      }
+      input.value = "";
+    };
+    reader.onerror = () => { flashMsg("⚠️ Could not read that file"); input.value = ""; };
+    reader.readAsText(file);
   };
 
   const totalTasks = WEEKS.reduce((s, w) => s + w.tasks.length, 0);
@@ -3751,6 +3804,16 @@ Keep it practical, specific to pharma in India, and actionable. Write like a kno
         </div>
         <div style={s.progressBar}>
           <div style={{ ...s.progressFill, width: `${pct}%` }} />
+        </div>
+        <div style={{ display: "flex", gap: 8, marginTop: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <button title="Download a backup of your progress to this device"
+            style={{ background: "rgba(52,224,184,0.12)", border: "1px solid rgba(52,224,184,0.4)", color: "#34E0B8", borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "monospace", minHeight: 36 }}
+            onClick={saveBackup}>💾 Save Backup</button>
+          <button title="Restore progress from a backup file"
+            style={{ background: "rgba(77,168,255,0.1)", border: "1px solid rgba(77,168,255,0.35)", color: "#4DA8FF", borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "monospace", minHeight: 36 }}
+            onClick={() => { if (restoreRef.current) restoreRef.current.click(); }}>📥 Restore</button>
+          <input ref={restoreRef} type="file" accept=".json,application/json" style={{ display: "none" }} onChange={restoreBackup} />
+          {saveMsg && <span style={{ fontSize: 11.5, color: saveMsg.indexOf("⚠️") === 0 ? "#FFB454" : "#34E0B8", fontFamily: "monospace" }}>{saveMsg}</span>}
         </div>
       </div>
 

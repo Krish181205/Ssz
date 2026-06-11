@@ -2,7 +2,9 @@
 
 A single-file React app: a **24-month, week-by-week mentor roadmap** (96 weeks, 167 tasks, 1,070 micro-steps) for a B.Pharm student in India building a pharma-tech startup + export business.
 
-**Open `pharma_mentor_fixed.html` in any browser — no install needed.**
+**Open `pharma_mentor_fixed.html` in any browser — no install needed.** Progress auto-saves locally; the **💾 Save Backup / 📥 Restore** buttons export/import your progress as a file on your device.
+
+Also included: **`index.html`** — an Advanced Skill Investment Calculator (daily hours/minutes/days sliders → live weekly/monthly/yearly totals, 10,000-hour mastery timeline, full-time-week equivalents, weekly time share). Single file, dark premium UI, optimised for Android (S25 Ultra class) and Windows 11 browsers.
 
 ## The 5 Phases
 

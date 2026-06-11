@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#020617">
+  <meta name="description" content="Advanced Skill Investment Calculator — convert daily practice into weekly, monthly and yearly compound totals, mastery timelines and deep schedule analytics.">
+  <title>⏱ Advanced Skill Investment Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Graceful fallback if the CDN is unreachable — the app stays dark, readable and functional */
+    html, body { background: #020617; color: #e2e8f0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    input[type="range"] { cursor: pointer; }
+    input[type="number"] { -moz-appearance: textfield; }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    ::selection { background: rgba(99, 102, 241, 0.4); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 99px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-200 antialiased relative overflow-x-hidden">
+
+  <!-- Ambient glowing mesh gradients -->
+  <div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+    <div class="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-indigo-600/20 blur-3xl"></div>
+    <div class="absolute top-1/3 -right-36 h-[28rem] w-[28rem] rounded-full bg-purple-600/15 blur-3xl"></div>
+    <div class="absolute -bottom-44 left-1/4 h-[26rem] w-[26rem] rounded-full bg-emerald-600/15 blur-3xl"></div>
+  </div>
+
+  <noscript>
+    <p style="position:relative;z-index:20;text-align:center;padding:16px;color:#fbbf24;">This calculator needs JavaScript enabled to run.</p>
+  </noscript>
+
+  <main class="relative z-10 flex min-h-screen items-center justify-center p-4 sm:p-6">
+    <div class="w-full max-w-3xl rounded-3xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-2xl shadow-2xl shadow-black/40 p-5 sm:p-8">
+
+      <!-- Header -->
+      <header class="mb-6">
+        <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-100">⏱ Advanced Skill Investment Calculator</h1>
+        <p class="mt-1 text-sm text-slate-400">Compound your daily practice into weekly, monthly and yearly totals — live, as you move the sliders.</p>
+      </header>
+
+      <!-- Presets bar -->
+      <nav class="mb-6 flex flex-wrap gap-2" aria-label="Schedule presets">
+        <button type="button" data-preset="casual"     class="preset-btn select-none touch-manipulation rounded-full border px-4 py-2 text-xs font-semibold transition-colors bg-slate-800/60 border-slate-700 text-slate-300">🌙 Casual</button>
+        <button type="button" data-preset="consistent" class="preset-btn select-none touch-manipulation rounded-full border px-4 py-2 text-xs font-semibold transition-colors bg-slate-800/60 border-slate-700 text-slate-300">📆 Consistent</button>
+        <button type="button" data-preset="default"    class="preset-btn select-none touch-manipulation rounded-full border px-4 py-2 text-xs font-semibold transition-colors bg-slate-800/60 border-slate-700 text-slate-300">⭐ Default</button>
+        <button type="button" data-preset="hardcore"   class="preset-btn select-none touch-manipulation rounded-full border px-4 py-2 text-xs font-semibold transition-colors bg-slate-800/60 border-slate-700 text-slate-300">🔥 Hardcore</button>
+      </nav>
+
+      <!-- Input matrix -->
+      <section class="grid grid-cols-1 gap-4 sm:grid-cols-3" aria-label="Schedule inputs">
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+          <div class="mb-3 flex items-center justify-between">
+            <label for="hoursBox" class="text-xs font-semibold uppercase tracking-widest text-indigo-300">Daily Hours</label>
+            <span class="rounded-md border border-indigo-400/30 bg-indigo-500/10 px-2 py-0.5 text-[10px] font-bold text-indigo-300">HRS</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <input id="hoursSlider" type="range" min="0" max="23" step="1" value="3"
+              class="h-2 flex-1 touch-manipulation accent-indigo-500" aria-label="Daily hours slider">
+            <input id="hoursBox" type="number" inputmode="numeric" min="0" max="23" step="1" value="3"
+              class="h-12 w-20 rounded-xl border border-slate-700 bg-slate-800/70 text-center text-lg font-semibold text-slate-100 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/40">
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+          <div class="mb-3 flex items-center justify-between">
+            <label for="minutesBox" class="text-xs font-semibold uppercase tracking-widest text-purple-300">Daily Minutes</label>
+            <span class="rounded-md border border-purple-400/30 bg-purple-500/10 px-2 py-0.5 text-[10px] font-bold text-purple-300">MIN</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <input id="minutesSlider" type="range" min="0" max="59" step="1" value="0"
+              class="h-2 flex-1 touch-manipulation accent-purple-500" aria-label="Daily minutes slider">
+            <input id="minutesBox" type="number" inputmode="numeric" min="0" max="59" step="1" value="0"
+              class="h-12 w-20 rounded-xl border border-slate-700 bg-slate-800/70 text-center text-lg font-semibold text-slate-100 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-500/40">
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+          <div class="mb-3 flex items-center justify-between">
+            <label for="daysBox" class="text-xs font-semibold uppercase tracking-widest text-emerald-300">Days Per Week</label>
+            <span class="rounded-md border border-emerald-400/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-300">DAYS</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <input id="daysSlider" type="range" min="1" max="7" step="1" value="7"
+              class="h-2 flex-1 touch-manipulation accent-emerald-500" aria-label="Days per week slider">
+            <input id="daysBox" type="number" inputmode="numeric" min="1" max="7" step="1" value="7"
+              class="h-12 w-20 rounded-xl border border-slate-700 bg-slate-800/70 text-center text-lg font-semibold text-slate-100 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/40">
+          </div>
+        </div>
+      </section>
+
+      <!-- Primary results -->
+      <section class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3" aria-live="polite" aria-label="Primary totals">
+        <div class="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-500/10 to-transparent p-5">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-indigo-300/90">Weekly Total</p>
+          <p id="weeklyOut" class="mt-2 text-2xl sm:text-3xl font-bold text-slate-50">21.0 hours</p>
+        </div>
+        <div class="rounded-2xl border border-purple-500/25 bg-gradient-to-br from-purple-500/10 to-transparent p-5">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300/90">Monthly Total</p>
+          <p id="monthlyOut" class="mt-2 text-2xl sm:text-3xl font-bold text-slate-50">91.2 hours</p>
+        </div>
+        <div class="rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-500/10 to-transparent p-5">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-emerald-300/90">Yearly Total</p>
+          <p id="yearlyOut" class="mt-2 text-2xl sm:text-3xl font-bold text-slate-50">1095.0 hours</p>
+        </div>
+      </section>
+
+      <!-- Deep insights -->
+      <section class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-5" aria-live="polite" aria-label="Schedule analytical insights">
+        <h2 class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Schedule Analytical Insights</h2>
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div>
+            <p class="text-xs text-slate-400">🏆 Time to Domain Mastery</p>
+            <p id="masteryOut" class="mt-1 text-xl font-bold text-slate-100">9.1 years</p>
+            <p class="text-[11px] text-slate-500">to the 10,000-hour benchmark</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400">💼 Equivalent Full-Time Weeks</p>
+            <p id="ftOut" class="mt-1 text-xl font-bold text-slate-100">27.4 weeks</p>
+            <p class="text-[11px] text-slate-500">of 40-hour workweeks per year</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400">📊 True Weekly Time Share</p>
+            <p id="shareOut" class="mt-1 text-xl font-bold text-slate-100">12.5%</p>
+            <p class="text-[11px] text-slate-500">of your full 168-hour week</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="mt-5 text-center text-[11px] leading-relaxed text-slate-600">
+        Monthly = weekly × 30.4 ÷ 7 &nbsp;·&nbsp; Yearly = weekly × 365 ÷ 7 &nbsp;·&nbsp; Mastery = 10,000 ÷ yearly. Everything updates live — no submit button.
+      </footer>
+    </div>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    var $ = function (id) { return document.getElementById(id); };
+
+    var fields = {
+      hours:   { slider: $("hoursSlider"),   box: $("hoursBox"),   min: 0, max: 23, def: 3 },
+      minutes: { slider: $("minutesSlider"), box: $("minutesBox"), min: 0, max: 59, def: 0 },
+      days:    { slider: $("daysSlider"),    box: $("daysBox"),    min: 1, max: 7,  def: 7 }
+    };
+    var out = {
+      weekly: $("weeklyOut"), monthly: $("monthlyOut"), yearly: $("yearlyOut"),
+      mastery: $("masteryOut"), ft: $("ftOut"), share: $("shareOut")
+    };
+    var PRESETS = {
+      casual:     { hours: 1, minutes: 0, days: 3 },
+      consistent: { hours: 2, minutes: 0, days: 5 },
+      "default":  { hours: 3, minutes: 0, days: 7 },
+      hardcore:   { hours: 6, minutes: 0, days: 7 }
+    };
+    var ACTIVE_CLASSES = ["bg-indigo-500/20", "border-indigo-400/60", "text-indigo-200"];
+    var IDLE_CLASSES = ["bg-slate-800/60", "border-slate-700", "text-slate-300"];
+
+    function clamp(v, min, max) { return Math.min(max, Math.max(min, v)); }
+
+    // Read a field safely: empty/garbage/out-of-range all resolve to a legal integer.
+    function readField(f) {
+      var raw = String(f.box.value).trim();
+      if (raw === "") return f.min;
+      var n = Number(raw);
+      if (!isFinite(n)) return f.min;
+      return clamp(Math.round(n), f.min, f.max);
+    }
+
+    function fmtHours(v) { return v.toFixed(1) + " hours"; }
+
+    function highlightPresets(h, m, d) {
+      var btns = document.querySelectorAll("[data-preset]");
+      for (var i = 0; i < btns.length; i++) {
+        var p = PRESETS[btns[i].getAttribute("data-preset")];
+        var active = !!p && p.hours === h && p.minutes === m && p.days === d;
+        var add = active ? ACTIVE_CLASSES : IDLE_CLASSES;
+        var remove = active ? IDLE_CLASSES : ACTIVE_CLASSES;
+        for (var r = 0; r < remove.length; r++) btns[i].classList.remove(remove[r]);
+        for (var a = 0; a < add.length; a++) btns[i].classList.add(add[a]);
+        btns[i].setAttribute("aria-pressed", active ? "true" : "false");
+      }
+    }
+
+    function calculate() {
+      var h = readField(fields.hours);
+      var m = readField(fields.minutes);
+      var d = readField(fields.days);
+
+      var daily = h + m / 60;              // decimal daily translation
+      var weekly = daily * d;              // proportional scaling engine
+      var monthly = weekly * (30.4 / 7);
+      var yearly = weekly * (365 / 7);
+
+      out.weekly.textContent = fmtHours(weekly);
+      out.monthly.textContent = fmtHours(monthly);
+      out.yearly.textContent = fmtHours(yearly);
+
+      if (yearly <= 0) {
+        out.mastery.textContent = "Never";
+      } else {
+        var years = 10000 / yearly;
+        out.mastery.textContent = years < 1
+          ? (years * 12).toFixed(1) + " months"
+          : years.toFixed(1) + " years";
+      }
+      out.ft.textContent = (yearly / 40).toFixed(1) + " weeks";
+      out.share.textContent = ((weekly / 168) * 100).toFixed(1) + "%";
+
+      highlightPresets(h, m, d);
+    }
+
+    function setField(f, v) {
+      var legal = clamp(Math.round(v), f.min, f.max);
+      f.box.value = String(legal);
+      f.slider.value = String(legal);
+    }
+
+    // Two-way binding
+    Object.keys(fields).forEach(function (key) {
+      var f = fields[key];
+
+      f.slider.addEventListener("input", function () {
+        f.box.value = f.slider.value;
+        calculate();
+      });
+
+      f.box.addEventListener("input", function () {
+        var raw = String(f.box.value).trim();
+        if (raw === "") {
+          // Let the user keep typing; snap the slider + math to the safe minimum meanwhile.
+          f.slider.value = String(f.min);
+        } else {
+          var v = readField(f);
+          if (Number(raw) !== v) f.box.value = String(v); // clamp 99 → 59 etc. instantly
+          f.slider.value = String(v);
+        }
+        calculate();
+      });
+
+      f.box.addEventListener("blur", function () {
+        f.box.value = String(readField(f)); // empty / garbage snaps to the boundary on blur
+        f.slider.value = f.box.value;
+        calculate();
+      });
+    });
+
+    // Presets
+    var presetBtns = document.querySelectorAll("[data-preset]");
+    for (var i = 0; i < presetBtns.length; i++) {
+      presetBtns[i].addEventListener("click", function () {
+        var p = PRESETS[this.getAttribute("data-preset")];
+        if (!p) return;
+        setField(fields.hours, p.hours);
+        setField(fields.minutes, p.minutes);
+        setField(fields.days, p.days);
+        calculate();
+      });
+    }
+
+    // Init
+    setField(fields.hours, fields.hours.def);
+    setField(fields.minutes, fields.minutes.def);
+    setField(fields.days, fields.days.def);
+    calculate();
+  })();
+  </script>
+</body>
+</html>
