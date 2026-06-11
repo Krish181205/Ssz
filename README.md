@@ -4,7 +4,7 @@ A single-file React app: a **24-month, week-by-week mentor roadmap** (96 weeks, 
 
 **Open `pharma_mentor_fixed.html` in any browser — no install needed.** Progress auto-saves locally; the **💾 Save Backup / 📥 Restore** buttons export/import your progress as a file on your device.
 
-Also included: **`index.html`** — an Advanced Skill Investment Calculator (daily hours/minutes/days sliders → live weekly/monthly/yearly totals, 10,000-hour mastery timeline, full-time-week equivalents, weekly time share). Single file, dark premium UI, optimised for Android (S25 Ultra class) and Windows 11 browsers.
+The **⏱ Skill Investment Calculator** is built into the app (header button) and also available standalone as **`index.html`** (daily hours/minutes/days sliders → live weekly/monthly/yearly totals, 10,000-hour mastery timeline, full-time-week equivalents, weekly time share). Single file, dark premium UI, optimised for Android (S25 Ultra class) and Windows 11 browsers.
 
 ## The 5 Phases
 

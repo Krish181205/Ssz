@@ -3610,6 +3610,147 @@ const appStorage = {
   <script type="text/babel">
     const { useState, useRef, useEffect } = React;
 
+// ─── SKILL INVESTMENT CALCULATOR ──────────────────────────────────────────────
+const CALC_FIELDS = {
+  hours:   { min: 0, max: 23, def: 3, label: "Daily Hours",   unit: "HRS",  color: "#818CF8" },
+  minutes: { min: 0, max: 59, def: 0, label: "Daily Minutes", unit: "MIN",  color: "#C084FC" },
+  days:    { min: 1, max: 7,  def: 7, label: "Days Per Week", unit: "DAYS", color: "#34E0B8" },
+};
+const CALC_PRESETS = [
+  { id: "casual",     label: "🌙 Casual",     hours: 1, minutes: 0, days: 3 },
+  { id: "consistent", label: "📆 Consistent", hours: 2, minutes: 0, days: 5 },
+  { id: "default",    label: "⭐ Default",    hours: 3, minutes: 0, days: 7 },
+  { id: "hardcore",   label: "🔥 Hardcore",   hours: 6, minutes: 0, days: 7 },
+];
+
+function SkillCalculator() {
+  const [vals, setVals] = useState({ hours: "3", minutes: "0", days: "7" });
+
+  const clampField = (key, v) => {
+    const f = CALC_FIELDS[key];
+    return Math.min(f.max, Math.max(f.min, Math.round(v)));
+  };
+  // Read a field safely: empty/garbage/out-of-range all resolve to a legal integer.
+  const numVal = (key) => {
+    const raw = String(vals[key]).trim();
+    if (raw === "") return CALC_FIELDS[key].min;
+    const n = Number(raw);
+    if (!isFinite(n)) return CALC_FIELDS[key].min;
+    return clampField(key, n);
+  };
+  const setFromSlider = (key, v) => setVals(prev => ({ ...prev, [key]: String(v) }));
+  const setFromBox = (key, raw) => {
+    const t = String(raw).trim();
+    if (t === "") { setVals(prev => ({ ...prev, [key]: "" })); return; }
+    const n = Number(t);
+    const v = isFinite(n) ? clampField(key, n) : CALC_FIELDS[key].min;
+    setVals(prev => ({ ...prev, [key]: (n === v ? t : String(v)) }));
+  };
+  const onBlurField = (key) => {
+    const v = numVal(key);
+    setVals(prev => ({ ...prev, [key]: String(v) }));
+  };
+  const applyPreset = (p) => setVals({ hours: String(p.hours), minutes: String(p.minutes), days: String(p.days) });
+
+  const h = numVal("hours"), m = numVal("minutes"), d = numVal("days");
+  const daily = h + m / 60;
+  const weekly = daily * d;
+  const monthly = weekly * (30.4 / 7);
+  const yearly = weekly * (365 / 7);
+  const fmtH = (v) => v.toFixed(1) + " hours";
+  let mastery;
+  if (yearly <= 0) mastery = "Never";
+  else {
+    const yrs = 10000 / yearly;
+    mastery = yrs < 1 ? (yrs * 12).toFixed(1) + " months" : yrs.toFixed(1) + " years";
+  }
+  const ftWeeks = (yearly / 40).toFixed(1) + " weeks";
+  const share = ((weekly / 168) * 100).toFixed(1) + "%";
+
+  const card = { background: "rgba(18,26,43,0.9)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: 14 };
+  const results = [
+    { label: "WEEKLY TOTAL",  value: fmtH(weekly),  color: "#818CF8" },
+    { label: "MONTHLY TOTAL", value: fmtH(monthly), color: "#C084FC" },
+    { label: "YEARLY TOTAL",  value: fmtH(yearly),  color: "#34E0B8" },
+  ];
+  const insights = [
+    { label: "🏆 Time to Domain Mastery",    value: mastery, sub: "to the 10,000-hour benchmark" },
+    { label: "💼 Equivalent Full-Time Weeks", value: ftWeeks, sub: "of 40-hour workweeks per year" },
+    { label: "📊 True Weekly Time Share",     value: share,   sub: "of your full 168-hour week" },
+  ];
+
+  return (
+    <div style={{ padding: "16px 16px 32px" }}>
+      {/* Presets bar */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
+        {CALC_PRESETS.map(p => {
+          const active = p.hours === h && p.minutes === m && p.days === d;
+          return (
+            <button key={p.id} onClick={() => applyPreset(p)} aria-pressed={active}
+              style={{ background: active ? "rgba(129,140,248,0.2)" : "rgba(255,255,255,0.04)", border: `1px solid ${active ? "#818CF8" : "rgba(255,255,255,0.12)"}`, color: active ? "#C7D2FE" : "#94A2BE", borderRadius: 99, padding: "8px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "monospace", minHeight: 36, touchAction: "manipulation" }}>
+              {p.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Input matrix */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
+        {Object.keys(CALC_FIELDS).map(key => {
+          const f = CALC_FIELDS[key];
+          return (
+            <div key={key} style={card}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: f.color, fontFamily: "monospace", textTransform: "uppercase" }}>{f.label}</span>
+                <span style={{ fontSize: 10, fontWeight: 700, color: f.color, border: `1px solid ${f.color}40`, background: `${f.color}14`, borderRadius: 6, padding: "2px 7px", fontFamily: "monospace" }}>{f.unit}</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <input type="range" min={f.min} max={f.max} step={1} value={numVal(key)}
+                  onChange={e => setFromSlider(key, e.target.value)}
+                  aria-label={f.label + " slider"}
+                  style={{ flex: 1, accentColor: f.color, height: 24, cursor: "pointer", touchAction: "manipulation", minWidth: 0 }} />
+                <input type="number" inputMode="numeric" min={f.min} max={f.max} step={1} value={vals[key]}
+                  onChange={e => setFromBox(key, e.target.value)}
+                  onBlur={() => onBlurField(key)}
+                  aria-label={f.label}
+                  style={{ width: 64, height: 44, borderRadius: 10, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.06)", color: "#E9EEF8", textAlign: "center", fontSize: 16, fontWeight: 600, outline: "none", flexShrink: 0 }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Primary results */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginTop: 14 }} aria-live="polite">
+        {results.map(r => (
+          <div key={r.label} style={{ ...card, background: `${r.color}0d`, border: `1px solid ${r.color}35` }}>
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", color: r.color, fontFamily: "monospace", marginBottom: 6 }}>{r.label}</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: "#E9EEF8", fontFamily: "'Space Grotesk', sans-serif" }}>{r.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Deep insights */}
+      <div style={{ ...card, marginTop: 14, padding: 16 }} aria-live="polite">
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#6F7E9C", fontFamily: "monospace", letterSpacing: "0.18em", marginBottom: 12 }}>SCHEDULE ANALYTICAL INSIGHTS</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12 }}>
+          {insights.map(it => (
+            <div key={it.label}>
+              <div style={{ fontSize: 12, color: "#94A2BE", marginBottom: 4 }}>{it.label}</div>
+              <div style={{ fontSize: 19, fontWeight: 700, color: "#E9EEF8", fontFamily: "'Space Grotesk', sans-serif" }}>{it.value}</div>
+              <div style={{ fontSize: 11, color: "#6F7E9C", marginTop: 2 }}>{it.sub}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: "#6F7E9C", marginTop: 14, lineHeight: 1.6 }}>
+        Monthly = weekly × 30.4 ÷ 7 · Yearly = weekly × 365 ÷ 7 · Mastery = 10,000 ÷ yearly · Updates live — no submit button.
+      </div>
+    </div>
+  );
+}
+
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
 function App() {
   const [selectedWeek, setSelectedWeek] = useState(null);
@@ -3788,6 +3929,20 @@ Keep it practical, specific to pharma in India, and actionable. Write like a kno
     tag: (c) => ({ display: "inline-block", background: `${c}18`, border: `1px solid ${c}40`, color: c, borderRadius: 6, padding: "2px 8px", fontSize: 11, fontWeight: 600, marginRight: 6, fontFamily: "monospace" }),
   };
 
+  // ── CALCULATOR VIEW ────────────────────────────────────────────────────────
+  if (view === "calc") return (
+    <div style={s.app}>
+      <div style={s.header}>
+        <button style={s.back} onClick={() => setView("overview")}>← All Weeks</button>
+        <div style={{ fontSize: 18, fontWeight: 700, fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1.2 }}>⏱ Skill Investment Calculator</div>
+        <div style={{ color: "#94A2BE", fontSize: 13, marginTop: 4 }}>Compound your daily practice into weekly, monthly and yearly totals — live, as you move the sliders.</div>
+      </div>
+      <div style={s.inner}>
+        <SkillCalculator />
+      </div>
+    </div>
+  );
+
   // ── OVERVIEW VIEW ──────────────────────────────────────────────────────────
   if (view === "overview") return (
     <div style={s.app}>
@@ -3812,6 +3967,9 @@ Keep it practical, specific to pharma in India, and actionable. Write like a kno
           <button title="Restore progress from a backup file"
             style={{ background: "rgba(77,168,255,0.1)", border: "1px solid rgba(77,168,255,0.35)", color: "#4DA8FF", borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "monospace", minHeight: 36 }}
             onClick={() => { if (restoreRef.current) restoreRef.current.click(); }}>📥 Restore</button>
+          <button title="Open the Skill Investment Calculator"
+            style={{ background: "rgba(129,140,248,0.12)", border: "1px solid rgba(129,140,248,0.4)", color: "#818CF8", borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "monospace", minHeight: 36 }}
+            onClick={() => setView("calc")}>⏱ Calculator</button>
           <input ref={restoreRef} type="file" accept=".json,application/json" style={{ display: "none" }} onChange={restoreBackup} />
           {saveMsg && <span style={{ fontSize: 11.5, color: saveMsg.indexOf("⚠️") === 0 ? "#FFB454" : "#34E0B8", fontFamily: "monospace" }}>{saveMsg}</span>}
         </div>
