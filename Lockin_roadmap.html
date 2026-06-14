@@ -4501,7 +4501,9 @@ Keep it practical, specific to pharma in India, and actionable. Write like a kno
           const done = weekDoneCount(week);
           const allDone = done === week.tasks.length;
           const ph = PHASES[week.phase];
-          const nDays = buildWeekDays(week).length;
+          const wkDays = buildWeekDays(week);
+          const nDays = wkDays.length;
+          const daysDone = wkDays.filter(d => d.items.every(it => completedTasks[it.task.id])).length;
           return (
             <div key={week.week} style={s.weekCard(week.phase, allDone)}
               onClick={() => { setSelectedWeek(week); setSelectedDayNum(null); setSelectedPart(null); setSelectedTask(null); setView("week"); }}>
@@ -4515,7 +4517,9 @@ Keep it practical, specific to pharma in India, and actionable. Write like a kno
                   </div>
                   <div style={{ fontWeight: 700, fontFamily: "Space Grotesk", fontSize: 14, marginBottom: 3 }}>{week.label}</div>
                   <div style={{ color: "#94A2BE", fontSize: 12.5 }}>{week.subtitle}</div>
-                  <div style={{ color: "#6F7E9C", fontSize: 11.5, marginTop: 4, fontFamily: "monospace" }}>📅 {nDays} day{nDays === 1 ? "" : "s"} · {week.tasks.length} task{week.tasks.length === 1 ? "" : "s"}</div>
+                  <div style={{ color: "#6F7E9C", fontSize: 11.5, marginTop: 4, fontFamily: "monospace" }}>
+                    📅 <span style={{ color: daysDone === nDays ? "#34E0B8" : "#94A2BE", fontWeight: 700 }}>Day {daysDone} of {nDays}</span> · {week.tasks.length} task{week.tasks.length === 1 ? "" : "s"}
+                  </div>
                 </div>
                 <div style={{ textAlign: "right", flexShrink: 0 }}>
                   <div style={{ fontSize: 15, fontWeight: 700, color: allDone ? "#34E0B8" : "#E9EEF8" }}>{done}/{week.tasks.length}</div>
