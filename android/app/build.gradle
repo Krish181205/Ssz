@@ -1,0 +1,40 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.personal.foundermentor'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.personal.foundermentor"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+// Bundle the latest single-file web app into the APK before every build so the
+// APK and index.html never drift. Works in CI and in Android Studio.
+tasks.register('copyWebApp', Copy) {
+    doFirst {
+        if (!file("$rootDir/../index.html").exists()) {
+            throw new GradleException("index.html not found at repo root — cannot bundle the web app")
+        }
+    }
+    from file("$rootDir/../index.html")
+    into file("src/main/assets")
+}
+tasks.named('preBuild') { dependsOn 'copyWebApp' }

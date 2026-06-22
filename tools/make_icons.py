@@ -83,6 +83,16 @@ def build(size, squircle=False):
     return img.resize((size, size), Image.LANCZOS)
 
 
+def build_foreground(size):
+    """Transparent capsule sized to sit inside the Android adaptive-icon safe
+    zone (used as the <foreground> over a solid navy <background>)."""
+    S = size * SS
+    img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    cap = capsule(int(S * 0.80))
+    img.alpha_composite(cap, ((S - cap.width) // 2, (S - cap.height) // 2))
+    return img.resize((size, size), Image.LANCZOS)
+
+
 def main():
     # maskable + apple icons are full-bleed (launcher / iOS apply their own mask)
     build(512, squircle=False).save(os.path.join(OUT, "icon-512-maskable.png"))
@@ -90,6 +100,8 @@ def main():
     # "any" purpose icons get a rounded squircle with transparent corners
     build(512, squircle=True).save(os.path.join(OUT, "icon-512.png"))
     build(192, squircle=True).save(os.path.join(OUT, "icon-192.png"))
+    # Android adaptive-icon foreground (transparent background)
+    build_foreground(432).save(os.path.join(OUT, "ic_launcher_foreground.png"))
     print("icons written to", os.path.abspath(OUT))
 
 

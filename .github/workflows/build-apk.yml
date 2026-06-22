@@ -1,0 +1,63 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "claude/focused-brown-s2z4yi" ]
+    paths:
+      - "android/**"
+      - "index.html"
+      - ".github/workflows/build-apk.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Build debug APK
+        working-directory: android
+        run: gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Stage APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk FounderMentor.apk
+
+      - name: Verify the web app is bundled
+        run: |
+          unzip -l FounderMentor.apk | grep -q "assets/index.html" \
+            && echo "OK: assets/index.html is inside the APK" \
+            || (echo "ERROR: web app not bundled" && exit 1)
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FounderMentor-APK
+          path: FounderMentor.apk
+          if-no-files-found: error
+
+      - name: Publish APK to a release (direct download link)
+        continue-on-error: true
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-latest
+          name: Founder Mentor APK (latest)
+          body: >
+            Sideload-ready debug APK built from index.html.
+            On the phone: enable "Install unknown apps" for your browser/file
+            manager, then open this APK to install. Fully offline.
+          files: FounderMentor.apk

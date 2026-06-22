@@ -32,6 +32,33 @@ off tasks persists between launches.
 
 ---
 
+## 📦 Or install as a real APK (recommended for a true app)
+
+If you'd rather have a real installed app (proper icon, no browser, nothing
+greyed out), there's a tiny **WebView wrapper APK** that bundles `index.html`
+inside it — so it's **fully offline, no hosting needed**.
+
+The APK is built automatically by GitHub Actions (the Android SDK can't be
+installed in this environment, but GitHub's runners have it):
+
+1. Go to the repo's **Actions** tab → **Build Android APK** → open the latest run.
+2. Download **`FounderMentor.apk`** — either from the run's **Artifacts**, or from
+   the **`apk-latest`** release at
+   `https://github.com/Krish181205/Ssz/releases/tag/apk-latest`
+   (the release link is a direct `.apk` download, easiest on the phone).
+3. On the S25 Ultra, open the APK. Android will ask to **allow installing
+   unknown apps** for your browser/file manager → allow it → **Install**.
+4. Launch **Founder Mentor** from your app drawer. Real app, works offline,
+   progress saved on-device.
+
+> It's a debug-signed APK — perfect for personal sideloading. Re-running the
+> workflow (Actions → **Run workflow**) rebuilds it from the current `index.html`.
+
+The Android project lives in [`android/`](android/) and the build workflow in
+[`.github/workflows/build-apk.yml`](.github/workflows/build-apk.yml).
+
+---
+
 ## 🎯 What was optimized for the S25 Ultra
 
 - **Installable PWA**: embedded web-app manifest + maskable app icons → real
