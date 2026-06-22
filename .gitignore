@@ -1,0 +1,6 @@
+# Build artifacts — the APK is published as a GitHub release asset, not committed.
+*.apk
+
+# Python
+__pycache__/
+*.pyc
