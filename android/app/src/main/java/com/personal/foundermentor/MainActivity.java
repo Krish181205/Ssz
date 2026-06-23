@@ -57,10 +57,14 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (web.canGoBack()) {
-            web.goBack();
-        } else {
-            super.onBackPressed();
-        }
+        // Ask the web app to go back one screen. If it's already at the top
+        // (overview), drop to the home screen instead of force-closing.
+        web.evaluateJavascript(
+                "(window.__appHandleBack && window.__appHandleBack()) ? '1' : '0'",
+                value -> {
+                    if (value == null || !value.contains("1")) {
+                        moveTaskToBack(true);
+                    }
+                });
     }
 }
