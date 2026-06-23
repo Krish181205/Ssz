@@ -4842,16 +4842,26 @@ function App() {
       if (fp !== 0) { setFilterPhase(0); return true; }
       return false; // overview + All Phases (app home) — let the device exit
     };
-    // The Android (APK) wrapper calls this on hardware back.
+    // The Android (APK) wrapper calls this on hardware back. Set first so the
+    // hardware back button works even if the History API below is unavailable.
     window.__appHandleBack = handleBack;
-    // Browser / installed-PWA back button & swipe gesture.
-    const onPop = () => {
-      if (handleBack()) history.pushState(null, ""); // re-arm to catch the next back
-    };
-    history.pushState(null, ""); // arm an entry so the first back is intercepted
-    window.addEventListener("popstate", onPop);
+    // Browser / installed-PWA back button & swipe gesture. Guarded: history
+    // .pushState can throw on some file:// (opaque-origin) WebViews — if so the
+    // APK bridge above still works and the app must never crash.
+    let onPop = null;
+    try {
+      onPop = () => {
+        if (handleBack()) {
+          try { history.pushState(null, ""); } catch (e) {} // re-arm next back
+        }
+      };
+      history.pushState(null, ""); // arm an entry so the first back is intercepted
+      window.addEventListener("popstate", onPop);
+    } catch (e) {
+      onPop = null;
+    }
     return () => {
-      window.removeEventListener("popstate", onPop);
+      if (onPop) window.removeEventListener("popstate", onPop);
       if (window.__appHandleBack === handleBack) delete window.__appHandleBack;
     };
   }, []);
