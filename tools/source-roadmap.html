@@ -4817,14 +4817,14 @@ function App() {
   // ── Hardware / browser BACK button ──────────────────────────────────────────
   // Step back through screens (mirrors each view's top-left back button) instead
   // of exiting. Only the overview (root) lets the device back button leave the app.
-  const navRef = useRef({ view, selectedDayNum, selectedTask });
+  const navRef = useRef({ view, selectedDayNum, selectedTask, filterPhase });
   useEffect(() => {
-    navRef.current = { view, selectedDayNum, selectedTask };
-  }, [view, selectedDayNum, selectedTask]);
+    navRef.current = { view, selectedDayNum, selectedTask, filterPhase };
+  }, [view, selectedDayNum, selectedTask, filterPhase]);
   useEffect(() => {
     const handleBack = () => {
-      const { view: v, selectedDayNum: dn, selectedTask: t } = navRef.current;
-      if (v === "calc") { setView("overview"); return true; }
+      const { view: v, selectedDayNum: dn, selectedTask: t, filterPhase: fp } = navRef.current;
+      if (v === "calc") { setView("overview"); setFilterPhase(0); return true; }
       if (v === "week") {
         setView("overview"); setSelectedTask(null);
         setGuideContent(""); setGuideLoading(false); return true;
@@ -4837,7 +4837,10 @@ function App() {
         setView(dn != null ? "day" : "week");
         setGuideContent(""); setGuideLoading(false); return true;
       }
-      return false; // overview / root — let the device exit the app
+      // On the overview a selected phase acts like a sub-page: Back returns to
+      // the "All Phases" home view before the device is allowed to exit.
+      if (fp !== 0) { setFilterPhase(0); return true; }
+      return false; // overview + All Phases (app home) — let the device exit
     };
     // The Android (APK) wrapper calls this on hardware back.
     window.__appHandleBack = handleBack;
