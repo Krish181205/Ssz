@@ -55,7 +55,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: apk-latest
-          name: Founder Mentor APK (latest)
+          name: Lock-in APK (latest)
           body: >
             Sideload-ready debug APK built from index.html.
             On the phone: enable "Install unknown apps" for your browser/file

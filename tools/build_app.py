@@ -43,8 +43,8 @@ def replace_once(html, old, new, label):
 # the document URL, which is correct both for file:// and when hosted.
 def build_manifest_datauri():
     manifest = {
-        "name": "Pharma-Tech Founder Mentor",
-        "short_name": "Founder Mentor",
+        "name": "Lock-in",
+        "short_name": "Lock-in",
         "description": "A 24-month Pharma-Tech founder roadmap with weekly tasks and progress tracking.",
         "display": "standalone",
         "orientation": "portrait",
@@ -66,8 +66,8 @@ def build_manifest_datauri():
 # ── external manifest for the optional hosted (GitHub Pages) path ─────────────
 def write_external_manifest():
     manifest = {
-        "name": "Pharma-Tech Founder Mentor",
-        "short_name": "Founder Mentor",
+        "name": "Lock-in",
+        "short_name": "Lock-in",
         "description": "A 24-month Pharma-Tech founder roadmap with weekly tasks and progress tracking.",
         "start_url": "./",
         "scope": "./",
@@ -155,8 +155,8 @@ def main():
         '  <meta name="apple-mobile-web-app-capable" content="yes">\n'
         '  <meta name="mobile-web-app-capable" content="yes">\n'
         '  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n'
-        '  <meta name="apple-mobile-web-app-title" content="Founder Mentor">\n'
-        '  <meta name="application-name" content="Founder Mentor">\n'
+        '  <meta name="apple-mobile-web-app-title" content="Lock-in">\n'
+        '  <meta name="application-name" content="Lock-in">\n'
         '  <meta name="description" content="A 24-month Pharma-Tech founder roadmap with weekly tasks and progress tracking — personal offline app.">\n'
         f'  <link rel="apple-touch-icon" sizes="180x180" href="{apple180}">\n'
         f'  <link rel="icon" type="image/png" sizes="192x192" href="{icon192}">\n'

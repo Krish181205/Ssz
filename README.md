@@ -1,4 +1,4 @@
-# 💊 Pharma-Tech Founder Mentor — Personal App
+# 💊 Lock-in — Personal App
 
 A 24-month, day-by-day founder roadmap (188 tasks across 5 phases) packaged as a
 private, **installable, offline app** — tuned for the **Samsung Galaxy S25 Ultra**.
@@ -21,7 +21,7 @@ runs **fully offline** with **zero internet** once it's on your phone.
 3. **Install it as an app** (gives it a real icon + full-screen, no address bar):
    - **Samsung Internet:** tap the **≡ menu** → **Add page to** → **Home screen**.
    - **Chrome:** tap the **⋮ menu** → **Add to Home screen** → **Install / Add**.
-4. You'll get a **“Founder Mentor”** icon (the teal/violet capsule) on your home
+4. You'll get a **“Lock-in”** icon (the teal/violet capsule) on your home
    screen. Launch it like any other app.
 
 Your progress is saved on the device (in the browser's local storage), so ticking
@@ -48,7 +48,7 @@ installed in this environment, but GitHub's runners have it):
    (the release link is a direct `.apk` download, easiest on the phone).
 3. On the S25 Ultra, open the APK. Android will ask to **allow installing
    unknown apps** for your browser/file manager → allow it → **Install**.
-4. Launch **Founder Mentor** from your app drawer. Real app, works offline,
+4. Launch **Lock-in** from your app drawer. Real app, works offline,
    progress saved on-device.
 
 > It's a debug-signed APK — perfect for personal sideloading. Re-running the
